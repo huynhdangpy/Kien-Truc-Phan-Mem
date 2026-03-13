@@ -1,0 +1,17 @@
+{
+  "name": "cms-project",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Layered CMS with microkernel backend plugins",
+  "scripts": {
+    "install:all": "npm install && npm --prefix backend install && npm --prefix frontend install",
+    "db": "json-server --watch db.json --port 3001",
+    "backend": "npm --prefix backend run dev",
+    "frontend": "npm --prefix frontend run dev",
+    "dev": "concurrently \"npm run db\" \"npm run backend\" \"npm run frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "json-server": "^1.0.0-beta.3"
+  }
+}

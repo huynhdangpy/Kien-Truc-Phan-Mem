@@ -1,0 +1,10 @@
+{
+  "name": "node-multistage-example",
+  "version": "1.0.0",
+  "private": true,
+  "main": "dist/app.js",
+  "scripts": {
+    "build": "node build.js",
+    "start": "node dist/app.js"
+  }
+}

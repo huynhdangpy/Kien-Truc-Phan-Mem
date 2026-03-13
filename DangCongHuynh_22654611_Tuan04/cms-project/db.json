@@ -1,0 +1,44 @@
+{
+  "posts": [
+    {
+      "id": "ecb3",
+      "createdAt": "2026-03-13T06:36:32.920Z",
+      "updatedAt": "2026-03-13T06:40:18.187Z",
+      "title": "đ",
+      "content": "d",
+      "tags": [
+        "đ"
+      ]
+    },
+    {
+      "id": "1960",
+      "createdAt": "2026-03-13T06:38:00.752Z",
+      "updatedAt": "2026-03-13T06:40:23.879Z",
+      "title": "dddđ",
+      "content": "hy",
+      "tags": [
+        "ds"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "1",
+      "name": "Admin User",
+      "role": "admin"
+    },
+    {
+      "id": "2",
+      "name": "Normal User",
+      "role": "user"
+    }
+  ],
+  "comments": [
+    {
+      "id": "1",
+      "postId": 1,
+      "author": "Normal User",
+      "text": "Great first post!"
+    }
+  ]
+}

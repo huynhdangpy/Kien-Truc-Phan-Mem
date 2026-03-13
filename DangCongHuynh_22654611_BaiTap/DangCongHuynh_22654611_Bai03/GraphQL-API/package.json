@@ -1,0 +1,17 @@
+{
+  "name": "graphql-api-example",
+  "version": "1.0.0",
+  "description": "GraphQL API example with Apollo Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "apollo-server": "^4.10.0",
+    "graphql": "^16.8.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
