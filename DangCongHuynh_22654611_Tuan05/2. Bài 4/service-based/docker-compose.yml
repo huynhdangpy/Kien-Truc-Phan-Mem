@@ -1,0 +1,81 @@
+services:
+  mongo:
+    image: mongo:7
+    container_name: sb-mongo
+    ports:
+      - "27018:27017"
+
+  gateway:
+    build: ./gateway
+    container_name: sb-gateway
+    ports:
+      - "7000:7000"
+    environment:
+      PORT: 7000
+      USER_SERVICE_URL: http://user-service:5001
+      PRODUCT_SERVICE_URL: http://product-service:5002
+      ORDER_SERVICE_URL: http://order-service:5003
+    volumes:
+      - ./gateway:/app
+      - /app/node_modules
+    depends_on:
+      - user-service
+      - product-service
+      - order-service
+
+  user-service:
+    build: ./user-service
+    container_name: sb-user-service
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: 5001
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/food_service_based}
+      JWT_SECRET: ${JWT_SECRET:-supersecret}
+    volumes:
+      - ./user-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+
+  product-service:
+    build: ./product-service
+    container_name: sb-product-service
+    ports:
+      - "5002:5002"
+    environment:
+      PORT: 5002
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/food_service_based}
+    volumes:
+      - ./product-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+
+  order-service:
+    build: ./order-service
+    container_name: sb-order-service
+    ports:
+      - "5003:5003"
+    environment:
+      PORT: 5003
+      MONGO_URI: ${MONGO_URI:-mongodb://mongo:27017/food_service_based}
+      USER_SERVICE_URL: http://user-service:5001
+      PRODUCT_SERVICE_URL: http://product-service:5002
+    volumes:
+      - ./order-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo
+      - user-service
+      - product-service
+
+  client:
+    build: ./client
+    container_name: sb-client
+    ports:
+      - "5173:80"
+    environment:
+      VITE_API_URL: http://gateway:7000/api
+    depends_on:
+      - gateway

@@ -1,0 +1,20 @@
+version: "3.8"
+
+services:
+  container1:
+    image: alpine:latest
+    container_name: container1
+    networks:
+      - private-network
+    command: /bin/sh -c "echo 'Container 1 started' && sleep infinity"
+
+  container2:
+    image: alpine:latest
+    container_name: container2
+    networks:
+      - private-network
+    command: /bin/sh -c "echo 'Container 2 started' && sleep infinity"
+
+networks:
+  private-network:
+    driver: bridge

@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  node:
+    build: .
+    container_name: react-app
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+    volumes:
+      - .:/app
+      - /app/node_modules
+    working_dir: /app
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-react
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./build:/usr/share/nginx/html:ro
+    depends_on:
+      - node

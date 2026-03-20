@@ -1,0 +1,118 @@
+services:
+  mongo-auth:
+    image: mongo:7
+    container_name: micro-mongo-auth
+    ports:
+      - "27101:27017"
+
+  mongo-product:
+    image: mongo:7
+    container_name: micro-mongo-product
+    ports:
+      - "27102:27017"
+
+  mongo-order:
+    image: mongo:7
+    container_name: micro-mongo-order
+    ports:
+      - "27103:27017"
+
+  mongo-cart:
+    image: mongo:7
+    container_name: micro-mongo-cart
+    ports:
+      - "27104:27017"
+
+  auth-service:
+    build: ./auth-service
+    container_name: micro-auth-service
+    ports:
+      - "5001:5001"
+    environment:
+      PORT: 5001
+      MONGO_URI: ${AUTH_MONGO_URI:-mongodb://mongo-auth:27017/auth_db}
+      JWT_SECRET: ${JWT_SECRET:-supersecret}
+    volumes:
+      - ./auth-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo-auth
+
+  product-service:
+    build: ./product-service
+    container_name: micro-product-service
+    ports:
+      - "5002:5002"
+    environment:
+      PORT: 5002
+      MONGO_URI: ${PRODUCT_MONGO_URI:-mongodb://mongo-product:27017/product_db}
+    volumes:
+      - ./product-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo-product
+
+  order-service:
+    build: ./order-service
+    container_name: micro-order-service
+    ports:
+      - "5003:5003"
+    environment:
+      PORT: 5003
+      MONGO_URI: ${ORDER_MONGO_URI:-mongodb://mongo-order:27017/order_db}
+      AUTH_SERVICE_URL: http://auth-service:5001
+      PRODUCT_SERVICE_URL: http://product-service:5002
+    volumes:
+      - ./order-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo-order
+      - auth-service
+      - product-service
+
+  cart-service:
+    build: ./cart-service
+    container_name: micro-cart-service
+    ports:
+      - "5004:5004"
+    environment:
+      PORT: 5004
+      MONGO_URI: ${CART_MONGO_URI:-mongodb://mongo-cart:27017/cart_db}
+    volumes:
+      - ./cart-service:/app
+      - /app/node_modules
+    depends_on:
+      - mongo-cart
+
+  api-gateway:
+    build: ./api-gateway
+    container_name: micro-api-gateway
+    ports:
+      - "8000:8000"
+    environment:
+      PORT: 8000
+      AUTH_SERVICE_URL: http://auth-service:5001
+      PRODUCT_SERVICE_URL: http://product-service:5002
+      ORDER_SERVICE_URL: http://order-service:5003
+      CART_SERVICE_URL: http://cart-service:5004
+    volumes:
+      - ./api-gateway:/app
+      - /app/node_modules
+    depends_on:
+      - auth-service
+      - product-service
+      - order-service
+      - cart-service
+
+  client:
+    build: ./client
+    container_name: micro-client
+    ports:
+      - "5174:5174"
+    environment:
+      VITE_API_URL: http://localhost:8000/api
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    depends_on:
+      - api-gateway

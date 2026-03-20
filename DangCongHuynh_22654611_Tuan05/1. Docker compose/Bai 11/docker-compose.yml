@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: postgres-container
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - postgres-network
+
+  adminer:
+    image: adminer:latest
+    container_name: adminer-container
+    ports:
+      - "8083:8080"
+    depends_on:
+      - postgres
+    networks:
+      - postgres-network
+
+volumes:
+  postgres_data:
+
+networks:
+  postgres-network:
+    driver: bridge
