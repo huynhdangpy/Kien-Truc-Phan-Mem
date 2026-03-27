@@ -1,0 +1,18 @@
+# PostgreSQL with Pre-loaded Data (Best Practice - Init Script)
+FROM postgres:15-alpine
+
+# Environment variables
+ENV POSTGRES_DB=mydb
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres_password
+
+# Copy initialization script
+# Files in /docker-entrypoint-initdb.d/ run automatically on first start
+COPY init.sql /docker-entrypoint-initdb.d/01-init.sql
+
+# Set proper permissions
+RUN chmod 644 /docker-entrypoint-initdb.d/01-init.sql
+
+EXPOSE 5432
+
+# Use default ENTRYPOINT and CMD from postgres:15

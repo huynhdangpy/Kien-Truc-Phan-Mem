@@ -1,0 +1,14 @@
+# OPTIMIZED 1-STAGE BUILD - After Optimization
+FROM node:18-alpine
+WORKDIR /app
+
+# Install only production dependencies
+COPY package*.json ./
+RUN npm ci --only=production && \
+    npm cache clean --force
+
+# Copy application files
+COPY . .
+
+EXPOSE 3000
+CMD ["node", "index.js"]

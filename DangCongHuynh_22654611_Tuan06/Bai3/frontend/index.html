@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Management - Service-Based Architecture</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📋 Task Management System</h1>
+            <p class="subtitle">Service-Based Architecture with Spring Boot</p>
+        </header>
+
+        <main>
+            <!-- Create Task Section -->
+            <section class="create-task-section">
+                <h2>Create New Task</h2>
+                <form id="taskForm">
+                    <div class="form-group">
+                        <label for="title">Task Title:</label>
+                        <input type="text" id="title" name="title" placeholder="Enter task title" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="description">Description:</label>
+                        <textarea id="description" name="description" placeholder="Enter task description" rows="3"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Create Task</button>
+                </form>
+            </section>
+
+            <!-- Filter Section -->
+            <section class="filter-section">
+                <h2>Filter Tasks</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-status="ALL">All Tasks</button>
+                    <button class="filter-btn" data-status="PENDING">Pending</button>
+                    <button class="filter-btn" data-status="IN_PROGRESS">In Progress</button>
+                    <button class="filter-btn" data-status="COMPLETED">Completed</button>
+                </div>
+            </section>
+
+            <!-- Loading Indicator -->
+            <div id="loadingIndicator" class="loading-indicator" style="display: none;">
+                <div class="spinner"></div>
+                <p>Loading tasks...</p>
+            </div>
+
+            <!-- Error Message -->
+            <div id="errorMessage" class="error-message"></div>
+
+            <!-- Success Message -->
+            <div id="successMessage" class="success-message"></div>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <h2>Tasks</h2>
+                <div id="tasksList" class="tasks-list">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </section>
+        </main>
+
+        <footer>
+            <p>&copy; 2024 Service-Based Architecture Demo | Spring Boot + PostgreSQL</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

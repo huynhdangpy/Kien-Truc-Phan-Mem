@@ -1,0 +1,75 @@
+version: "3.8"
+
+services:
+  # PostgreSQL with Volume (Best for production)
+  postgres-prod:
+    image: postgres:15-alpine
+    container_name: pg-prod
+    environment:
+      POSTGRES_DB: production_db
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: secure_password
+    volumes:
+      # Named volume for persistent data
+      - pg-prod-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL with Init Script (Best for development)
+  postgres-dev:
+    image: postgres:15-alpine
+    container_name: pg-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # Named volume for persistent data
+      - pg-dev-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL with Bind Mount (Best for local development)
+  postgres-local:
+    image: postgres:15-alpine
+    container_name: pg-local
+    environment:
+      POSTGRES_DB: localdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      # Bind mount to local directory (can see files on host)
+      - ./postgres_local_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg-prod-data:
+    driver: local
+  pg-dev-data:
+    driver: local
+
+# Usage:
+# docker-compose up -d                 # Start all services
+# docker-compose ps                    # Show status
+# docker-compose logs -f postgres-dev  # View logs
+# docker-compose down                  # Stop (data persists)
+# docker-compose down -v               # Stop and remove volumes
