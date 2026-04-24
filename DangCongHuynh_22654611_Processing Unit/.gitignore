@@ -1,0 +1,41 @@
+# Maven
+target/
+*.jar
+*.war
+*.ear
+.m2/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.iml
+
+# Gradle
+.gradle/
+build/
+
+# Spring Boot
+spring-boot-devtools.properties
+
+# Logs
+logs/
+*.log
+
+# Runtime
+.env
+*.pid
+
+# Dependencies
+node_modules/
+
+# Compiled files
+*.class
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
